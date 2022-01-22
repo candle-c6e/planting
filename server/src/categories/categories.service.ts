@@ -7,12 +7,12 @@ export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
   async createCategory(data: Prisma.CategoryCreateInput): Promise<Category> {
-    const existsCategory = await this.prisma.category.findUnique({
+    const existsCategory = await this.prisma.category.findFirst({
       where: { name: data.name },
     });
 
     if (existsCategory) {
-      throw new HttpException('Conflict', HttpStatus.CONFLICT);
+      throw new HttpException('category is exists', HttpStatus.CONFLICT);
     }
 
     return this.prisma.category.create({
